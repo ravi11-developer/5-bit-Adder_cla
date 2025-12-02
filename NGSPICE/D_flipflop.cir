@@ -1,0 +1,97 @@
+* TSPC D Flip-Flop NGSPICE Code
+.include TSMC_180nm.txt
+.param LAMBDA = 0.09u
+.param SUPPLY = 1.8v
+.param WIDTH_N = {20*LAMBDA}  
+.param W = {WIDTH_N}
+.param WIDTH_P = {2*WIDTH_N} 
+.global gnd Vdd
+
+VDD Vdd gnd DC 'SUPPLY'
+
+* Input Signals
+Va1 A1 gnd PULSE(0 1.8 2ns 0ns 0ns 1.5ns 3ns)
+VS clk gnd PULSE (0 1.8 2ns 0ns 0ns 0.6ns 1.2ns)
+
+.subckt inverter ip op vdd gnd S=1
+.param w_p = {2*W}
+.param w_n = {W}
+
+Minv1 op ip vdd vdd CMOSP W={S*w_p} L={2*LAMBDA} 
++ AS={S*5*w_p*LAMBDA} PS={10*LAMBDA+S*2*w_p} 
++ AD={S*5*w_p*LAMBDA} PD={10*LAMBDA+S*2*w_p}
+
+Minv2 op ip gnd gnd CMOSN W={S*w_n} L={2*LAMBDA} 
++ AS={S*5*w_n*LAMBDA} PS={10*LAMBDA+S*2*w_n} 
++ AD={S*5*w_n*LAMBDA} PD={10*LAMBDA+S*2*w_n}
+.ends inverter
+
+.subckt TSPC_DFF d q clk vdd gnd S=1
+.param width_P = {20*LAMBDA}
+.param width_N = {10*LAMBDA}
+
+* Master Stage
+M1 x d gnd gnd CMOSN W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M2 x clk a vdd CMOSP W={width_P} L={2*LAMBDA} 
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M3 a d vdd vdd CMOSP W={width_P} L={2*LAMBDA} 
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+* Slave Stage
+M4 b clk gnd gnd CMOSN  W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M5 y x b gnd CMOSN  W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M6 y clk vdd vdd CMOSP W={width_P} L={2*LAMBDA} 
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+* Output Stage
+M7 c y gnd gnd CMOSN W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M8 qbar clk c gnd CMOSN W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M9 qbar y vdd vdd CMOSP W={width_P} L={2*LAMBDA} 
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+* Output Buffer
+M10 q qbar vdd vdd CMOSP W={width_P} L={2*LAMBDA} 
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M11 q qbar gnd gnd CMOSN W={width_N} L={2*LAMBDA} 
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+.ends TSPC_DFF
+
+.subckt load in vdd gnd
+.param width_P = {20*LAMBDA}
+.param width_N = {10*LAMBDA}
+M1 dont_care in vdd vdd CMOSP W={width_P} L={2*LAMBDA} 
++AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} 
++AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M2 dont_care in gnd gnd CMOSN W={width_N} L={2*LAMBDA} 
++AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} 
++AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+.ends load
+
+
+X1 A1 q1 clk Vdd gnd TSPC_DFF
+X2 q1 dont_care_m vdd gnd inverter
+.measure tran tpcq_lh
++ TRIG v(clk) VAL=0.9 RISE=2
++ TARG v(q1) VAL=0.9 RISE=1
+
+.measure tran tpcq_hl
++ TRIG v(clk) VAL=0.9 RISE=3
++ TARG v(q1) VAL=0.9 FALL=1
+
+.measure tran avg_tpcq param = ((tpcq_lh + tpcq_hl)/2)
+
+.tran 1ps 20ns
+.control
+run
+set curplottitle = "raviSahu2024102024_CLAADDER"
+set color0 = white
+set xbrushwidth = 3
+set hcopypscolor=1
+plot v(q1) 2+v(A1) 4+v(clk)
+hardcopy D_flipflop_plot.ps v(q1) 2+v(A1) 4+v(clk) v(q1) v(A1) v(clk)
+.endc

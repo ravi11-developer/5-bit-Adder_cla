@@ -1,0 +1,137 @@
+*circuit for propogate and generate
+.include TSMC_180nm.txt
+.param LAMBDA = 0.09u
+.param SUPPLY = 1.8v
+.param W = {20*LAMBDA}
+.param WIDTH_N = {W}  
+.param WIDTH_P = {2*W} 
+
+.param width_N_min = {20*LAMBDA}
+.param width_P_min = {2*width_N_min}
+
+.global gnd Vdd
+
+VDD Vdd gnd DC 'SUPPLY'
+
+* Input Signals
+Va1 a1 gnd PULSE(0 1.8 2ns 0ns 0ns 0.5ns 1ns)
+Vb1 b1 gnd PULSE(1.8 0 1ns 0ns 0ns 1ns 2ns)
+
+Va2 a2 gnd PULSE(0 1.8 0ns 0.5ns 0.5ns 15ns 30ns)
+Vb2 b2 gnd PULSE (0 1.8 0ns 0.5ns 0.5ns 5ns 10ns)
+
+Va4 a4 gnd PULSE(0 1.8 4ns 0ns 0ns 0.5ns 1ns)
+Vb4 b4 gnd PULSE(1.8 0 2ns 0ns 0ns 1ns 2ns)
+
+.subckt inverter ip op vdd gnd S=1
+.param w_p = {2*W}
+.param w_n = {W}
+
+M1 op ip vdd vdd CMOSP W={S*w_p} L={2*LAMBDA} 
++ AS={S*5*w_p*LAMBDA} PS={10*LAMBDA+S*2*w_p} 
++ AD={S*5*w_p*LAMBDA} PD={10*LAMBDA+S*2*w_p}
+
+M2 op ip gnd gnd CMOSN W={S*w_n} L={2*LAMBDA} 
++ AS={S*5*w_n*LAMBDA} PS={10*LAMBDA+S*2*w_n} 
++ AD={S*5*w_n*LAMBDA} PD={10*LAMBDA+S*2*w_n}
+.ends inverter
+
+
+*Subcircuit for GENERATE 
+.subckt generate ai bi gi vdd gnd S=1
+.param W_p = {2*W}
+.param W_n = {2*W}
+
+M3 gen_bar ai Vdd Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M4 gen_bar bi Vdd Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M5 gen_bar ai n1 gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+M6 n1 bi gnd gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+X1 gen_bar gi vdd gnd inverter
+.ends generate
+
+*Subcircuit for propagate
+.subckt propagate ai bi pi vdd gnd S=1
+.param W_p = {4*W}
+.param W_n = {2*W}
+
+X11 ai ai_bar vdd gnd inverter
+X22 bi bi_bar vdd gnd inverter
+
+M7 n11 ai Vdd Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M8 n11 bi Vdd Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M9 pi_temp ai_bar n11 Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M10 pi_temp bi_bar n11 Vdd CMOSP W={S*W_p} L={2*LAMBDA}
++ AS={S*5*W_p*LAMBDA} PS={10*LAMBDA+S*2*W_p} 
++ AD={S*5*W_p*LAMBDA} PD={10*LAMBDA+S*2*W_p}
+
+M11 pi_temp ai n22 gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+M12 pi_temp ai_bar n33 gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+M13 n22 bi gnd gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+M14 n33 bi_bar gnd gnd CMOSN W={S*W_n} L={2*LAMBDA}
++ AS={S*5*W_n*LAMBDA} PS={10*LAMBDA+S*2*W_n} 
++ AD={S*5*W_n*LAMBDA} PD={10*LAMBDA+S*2*W_n}
+
+X111 pi_temp pi_temp2 vdd gnd inverter
+X222 pi_temp2 pi vdd gnd inverter
+.ends propagate
+
+X2 a1 b1 g1 vdd gnd generate
+X5 a4 b4 g4 vdd gnd generate
+
+X4 a1 b1 p1 vdd gnd propagate
+X6 a4 b4 p4 vdd gnd propagate
+
+.measure tran prop_delay
++TRIG v(a1) VAL=0.9 FALL=1
++TARG v(p1) VAL=0.9 RISE=1
+
+.measure tran gen_delay
++TRIG v(a1) VAL=0.9 RISE=1
++TARG v(g1) VAL=0.9 RISE=1
+
+.tran 1ps 10ns
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set hcopypscolor=1
+set curplottitle = "raviSahu2024102024_CLAADDER"
+plot v(g1) 2+v(p1) 4+v(b1) 6+v(a1)
+hardcopy prop_gen_bit1_outputs.ps v(g1) 2+v(p1) 4+v(b1) 6+v(a1)
+plot 8+v(g4) 10+v(p4) 12+v(b4) 14+v(a4)
+hardcopy prop_gen_bit4_outputs.ps 8+v(g4) 10+v(p4) 12+v(b4) 14+v(a4)
+.endc
+
+
+
