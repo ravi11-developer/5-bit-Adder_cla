@@ -1,0 +1,77 @@
+* SPICE3 file created from or4.ext - technology: scmos
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.option scale=90n
+.global gnd vdd
+
+Vdd vdd gnd 'SUPPLY'
+
+
+M1000 out nout vdd vdd CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=50u
+M1001 out nout gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=30u
+M1002 a_n15_n12# b a_n27_n12# vdd CMOSP w=80 l=2
++  ad=0.4n pd=90u as=0.4n ps=90u
+M1003 a_n27_n12# a vdd vdd CMOSP w=80 l=2
++  ad=0.4n pd=90u as=0.4n ps=0.17m
+M1004 gnd b nout Gnd CMOSN w=10 l=2
++  ad=50p pd=20u as=50p ps=20u
+M1005 a_n3_n12# c a_n15_n12# vdd CMOSP w=80 l=2
++  ad=0.4n pd=90u as=0.4n ps=90u
+M1006 nout d a_n3_n12# vdd CMOSP w=80 l=2
++  ad=0.4n pd=0.17m as=0.4n ps=90u
+M1007 nout a gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=20u as=50p ps=30u
+M1008 nout c gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=20u as=50p ps=20u
+M1009 gnd d nout Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=20u
+C0 out gnd 0.103095f
+C1 c gnd 0.001976f
+C2 b nout 0.136283f
+C3 vdd a_n3_n12# 1.36e-19
+C4 c d 0.50684f
+C5 a c 0.007278f
+C6 vdd d 0.020633f
+C7 vdd a 0.020635f
+C8 nout out 0.060313f
+C9 d gnd 0.001614f
+C10 a gnd 0.034605f
+C11 c nout 0.012569f
+C12 vdd nout 0.030638f
+C13 vdd a_n27_n12# 1.36e-19
+C14 b c 0.341485f
+C15 a d 0.007681f
+C16 vdd b 0.019908f
+C17 nout gnd 0.694186f
+C18 b gnd 0.001976f
+C19 d nout 0.07458f
+C20 vdd out 0.243018f
+C21 a nout 0.058251f
+C22 vdd a_n15_n12# 1.36e-19
+C23 b d 0.007681f
+C24 a b 0.176533f
+C25 vdd c 0.019908f
+C26 gnd 0 0.315525f 
+C27 out 0 0.109428f 
+C28 nout 0 0.639511f 
+C29 d 0 0.408818f 
+C30 c 0 0.346336f 
+C31 b 0 0.324549f 
+C32 a 0 0.315671f 
+C33 vdd 0 8.848519f 
+
+va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
+vc c gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
+vd d gnd pulse 0 1.8 0 0.1n 0.1n 80n 160n
+
+.tran  0.01n 200ns
+.control
+run
+plot v(a) v(b)+2 v(c)+4 v(d)+6 v(out)+8
+set hcopypscolor = 1
+set color0=white
+set color1=black
+.endc

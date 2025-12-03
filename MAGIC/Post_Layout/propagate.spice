@@ -1,0 +1,64 @@
+* SPICE3 file created from prop.ext - technology: scmos
+.include TSMC_180nm.txt
+.option scale=0.09u
+.global gnd Vdd
+
+vdd vdd gnd 1.8
+
+* Input Signals
+Va1 a gnd PULSE(0 1.8 0ns 0ns 0ns 5ns 10ns)
+Va2 b gnd PULSE(0 1.8 2ns 0ns 0ns 10ns 20ns)
+
+M1000 a_bar a vdd w_n30_42# CMOSP w=20 l=2
++  ad=100 pd=50 as=100 ps=50
+M1001 out b a_bar Gnd CMOSN w=10 l=2
++  ad=100 pd=60 as=100 ps=60
+M1002 out a_bar b Gnd CMOSN w=10 l=2
++  ad=0 pd=0 as=50 ps=30
+M1003 a_bar a gnd Gnd CMOSN w=10 l=2
++  ad=0 pd=0 as=50 ps=30
+M1004 b a out w_30_50# CMOSP w=20 l=2
++  ad=100 pd=50 as=200 ps=100
+M1005 out b a w_0_49# CMOSP w=20 l=2
++  ad=0 pd=0 as=100 ps=50
+C0 a w_0_49# 0.09fF
+C1 a_bar b 0.11fF
+C2 a a_bar 0.05fF
+C3 a_bar gnd 0.10fF
+C4 w_0_49# out 0.05fF
+C5 a w_n30_42# 0.07fF
+C6 a_bar vdd 0.25fF
+C7 b w_30_50# 0.09fF
+C8 vdd w_n30_42# 0.09fF
+C9 a_bar out 0.20fF
+C10 a w_30_50# 0.07fF
+C11 a gnd 0.05fF
+C12 a vdd 0.38fF
+C13 b out 0.63fF
+C14 out w_30_50# 0.05fF
+C15 a out 0.38fF
+C16 a_bar w_n30_42# 0.05fF
+C17 b w_0_49# 0.07fF
+C18 gnd Gnd 0.03fF
+C19 out Gnd 0.20fF
+C20 a_bar Gnd 0.41fF
+C21 vdd Gnd 0.03fF
+C22 a Gnd 0.28fF
+C23 b Gnd 0.84fF
+C24 w_30_50# Gnd 0.80fF
+C25 w_0_49# Gnd 0.67fF
+C26 w_n30_42# Gnd 0.84fF
+
+.measure tran delay_dff_in
++TRIG v(clk) VAL=0.9 RISE=5
++TARG v(dff_op) VAL=0.9 FALL=2
+
+.tran 100ps 60ns
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_propagate"
+plot v(out) 2+v(b) 4+V(a) 
+.endc

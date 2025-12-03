@@ -1,0 +1,60 @@
+* SPICE3 file created from and_lbl.ext - technology: scmos
+.include TSMC_180nm.txt
+.option scale=0.09u
+.global gnd Vdd
+
+vdd vdd gnd 1.8
+
+* Input Signals
+Va1 a gnd PULSE(0 1.8 2ns 0ns 0ns 5ns 10ns)
+Va2 b gnd PULSE(0 1.8 0ns 0ns 0ns 10ns 20ns)
+
+M1000 vdd b a_17_47# w_4_37# cmosp w=40 l=2
++  ad=600 pd=270 as=240 ps=92
+M1001 a_17_47# b a_17_n11# Gnd cmosn w=40 l=2
++  ad=200 pd=90 as=240 ps=92
+M1002 and_out a_17_47# vdd w_55_38# cmosp w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1003 a_17_47# a vdd w_4_37# cmosp w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1004 and_out a_17_47# gnd Gnd cmosn w=20 l=2
++  ad=100 pd=50 as=300 ps=140
+M1005 a_17_n11# a gnd Gnd cmosn w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 and_out a_17_47# 0.05fF
+C1 b a 0.19fF
+C2 and_out gnd 0.21fF
+C3 w_4_37# vdd 0.20fF
+C4 a_17_47# vdd 0.86fF
+C5 and_out w_55_38# 0.08fF
+C6 b vdd 0.12fF
+C7 w_4_37# a_17_47# 0.04fF
+C8 w_55_38# vdd 0.09fF
+C9 a_17_47# gnd 0.08fF
+C10 a vdd 0.12fF
+C11 b w_4_37# 0.12fF
+C12 b a_17_47# 0.08fF
+C13 and_out vdd 0.41fF
+C14 a_17_47# w_55_38# 0.09fF
+C15 w_4_37# a 0.12fF
+C16 gnd Gnd 0.37fF
+C17 and_out Gnd 0.11fF
+C18 vdd Gnd 0.08fF
+C19 a_17_47# Gnd 0.32fF
+C20 b Gnd 0.08fF
+C21 a Gnd 0.08fF
+C22 w_55_38# Gnd 1.51fF
+C23 w_4_37# Gnd 1.93fF
+
+.tran 100ps 60ns
+.measure tran GEN_DELAY
++TRIG v(a) VAL=0.9 RISE=1
++TARG v(and_out) VAL=0.9 RISE=1
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_generate"
+plot v(and_out) 2+v(b) 4+V(a) 
+.endc

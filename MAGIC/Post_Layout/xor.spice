@@ -1,0 +1,62 @@
+* SPICE3 file created from xor_tg_lbl.ext - technology: scmos
+
+.include TSMC_180nm.txt
+.option scale=0.09u
+.global gnd Vdd
+
+vdd vdd gnd 1.8
+
+* Input Signals
+Va1 a gnd PULSE(0 1.8 2ns 0ns 0ns 5ns 10ns)
+Va2 b gnd PULSE(0 1.8 0ns 0ns 0ns 10ns 20ns)
+
+
+M1000 a_17_8# a vdd w_4_38# CMOSP w=40 l=2
++  ad=200 pd=90 as=200 ps=90
+M1001 xor_op b a_17_8# Gnd CMOSN w=20 l=2
++  ad=200 pd=100 as=200 ps=100
+M1002 xor_op a_17_8# b Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=100 ps=50
+M1003 xor_op b a w_42_39# CMOSP w=40 l=2
++  ad=400 pd=180 as=200 ps=90
+M1004 b a xor_op w_75_54# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1005 a_17_8# a gnd Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=100 ps=50
+C0 a_17_8# xor_op 0.29fF
+C1 a gnd 0.04fF
+C2 w_42_39# xor_op 0.08fF
+C3 a_17_8# b 0.12fF
+C4 a vdd 0.03fF
+C5 a w_4_38# 0.09fF
+C6 w_4_38# vdd 0.12fF
+C7 w_42_39# b 0.23fF
+C8 a xor_op 0.47fF
+C9 w_75_54# a 0.14fF
+C10 a b 0.05fF
+C11 a_17_8# gnd 0.25fF
+C12 w_75_54# xor_op 0.09fF
+C13 a a_17_8# 0.05fF
+C14 xor_op b 1.04fF
+C15 a_17_8# vdd 0.44fF
+C16 w_4_38# a_17_8# 0.08fF
+C17 a w_42_39# 0.09fF
+C18 w_75_54# b 0.07fF
+C19 gnd Gnd 0.12fF
+C20 xor_op Gnd 0.22fF
+C21 a_17_8# Gnd 0.45fF
+C22 vdd Gnd 0.03fF
+C23 b Gnd 0.48fF
+C24 a Gnd 0.15fF
+C25 w_75_54# Gnd 0.08fF
+C26 w_42_39# Gnd 1.48fF
+C27 w_4_38# Gnd 1.51fF
+.tran 100ps 60ns
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_xor"
+plot v(xor_op) 2+v(b) 4+V(a) 
+.endc

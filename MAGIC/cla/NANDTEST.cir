@@ -1,0 +1,39 @@
+* SPICE3 file created from 2_nand.ext - technology: scmos
+
+.include "TSMC_180nm.txt"
+* .option scale=90n
+
+M1000 a_7_n33# input_1 vcc 0 CMOSN w=20 l=2
++  ad=60p pd=26u as=100p ps=50u
+M1001 0 input_2 a_7_n33# 0 CMOSN w=20 l=2
++  ad=100p pd=50u as=60p ps=26u
+M1002 vcc input_2 a_7_1# vcc CMOSP w=20 l=2
++  ad=100p pd=50u as=60p ps=26u
+M1003 a_7_1# input_1 vcc vcc CMOSP w=20 l=2
++  ad=60p pd=26u as=100p ps=50u
+C0 0 input_2 0.00145f
+C1 vcc input_1 0.02415f
+C2 vcc input_2 0.05886f
+C3 vcc vcc 0.03442f
+C4 a_7_n33# 0 0.20619f
+C5 vcc input_1 0.0579f
+C6 0 vcc 0.03301f
+C7 vcc a_7_1# 0.47843f
+C8 a_7_n33# vcc 0.23921f
+C9 vcc input_2 0.02415f
+C10 input_2 input_1 0.226f
+C11 0 0 0.05383f 
+C12 a_7_n33# 0 0.00473f 
+C13 a_7_1# 0 0 
+C14 vcc 0 0.24397f 
+C15 input_2 0 0.17584f 
+C16 input_1 0 0.17584f 
+C17 vcc 0 1.02851f 
+
+VDD vcc 0 1.8
+Vin1 input_1 0 PULSE(0 1.8 0 1n 1n 5n 10n)
+Vin2 input_2 0 PULSE(0 1.8 0 1n 1n 10n 20n)
+.tran 0.1n 10
+.plot v(input_1) v(input_2) v(a_7_1#)
+
+.end

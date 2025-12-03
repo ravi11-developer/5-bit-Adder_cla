@@ -1,0 +1,143 @@
+* SPICE3 file created from newc7_lab.ext - technology: scmos
+
+.include TSMC_180nm.txt
+.option scale=0.09u
+.global gnd Vdd
+
+vdd vdd gnd 1.8
+
+* Input Signals
+Va0 p3 gnd PULSE(0 1.8 0ns 0ns 0ns 3ns 6ns)
+Va11 g3 gnd PULSE(0 1.8 0ns 0ns 0ns 10ns 20ns)
+Va1 g2 gnd 0V
+Va2 g1 gnd PULSE(0 1.8 0ns 0ns 0ns 10ns 20ns)
+Va3 g0 gnd PULSE(0 1.8 2ns 0ns 0ns 15ns 30ns)
+Va4 p2 gnd PULSE(0 1.8 0ns 0ns 0ns 7ns 14ns)
+Va5 p1 gnd PULSE(0 1.8 2ns 0ns 0ns 20ns 40ns)
+
+M1000 a_41_4# g0 a_57_4# Gnd CMOSN w=20 l=2
++  ad=220 pd=102 as=120 ps=52
+M1001 a_33_48# g2 a_17_4# w_4_38# CMOSP w=40 l=2
++  ad=480 pd=184 as=240 ps=92
+M1002 a_17_4# g3 gnd Gnd CMOSN w=20 l=2
++  ad=120 pd=52 as=320 ps=152
+M1003 a_33_48# p1 a_49_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=440 ps=182
+M1004 a_17_48# g3 vdd w_4_38# CMOSP w=40 l=2
++  ad=480 pd=184 as=400 ps=180
+M1005 a_41_4# p2 gnd Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=0 ps=0
+M1006 c4 a_17_4# gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=0 ps=0
+M1007 a_25_4# p3 a_17_4# Gnd CMOSN w=20 l=2
++  ad=240 pd=104 as=0 ps=0
+M1008 a_17_48# p2 a_33_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1009 a_25_4# g1 a_41_4# Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=0 ps=0
+M1010 gnd g2 a_25_4# Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=0 ps=0
+M1011 a_17_4# p3 a_17_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1012 a_49_48# g0 a_33_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1013 c4 a_17_4# vdd w_86_40# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1014 a_57_4# p1 a_25_4# Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=0 ps=0
+M1015 a_49_48# g1 a_17_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 g2 vdd 0.13fF
+C1 p3 g2 0.25fF
+C2 w_86_40# a_17_4# 0.09fF
+C3 a_17_48# a_49_48# 0.52fF
+C4 p2 g2 0.25fF
+C5 w_4_38# a_33_48# 0.10fF
+C6 a_33_48# a_17_4# 0.87fF
+C7 gnd a_41_4# 0.66fF
+C8 p3 vdd 0.13fF
+C9 p2 vdd 0.13fF
+C10 w_4_38# a_17_48# 0.12fF
+C11 a_17_48# a_17_4# 0.44fF
+C12 p1 vdd 0.13fF
+C13 g2 a_25_4# 0.08fF
+C14 vdd g0 0.13fF
+C15 a_57_4# a_25_4# 0.21fF
+C16 c4 vdd 0.44fF
+C17 g1 vdd 0.13fF
+C18 p2 a_25_4# 0.08fF
+C19 p2 g1 0.25fF
+C20 a_33_48# a_17_48# 0.49fF
+C21 a_49_48# vdd 0.21fF
+C22 w_4_38# g2 0.17fF
+C23 p1 g0 0.25fF
+C24 g2 a_17_4# 0.08fF
+C25 w_4_38# vdd 0.22fF
+C26 g3 vdd 0.13fF
+C27 w_4_38# p3 0.17fF
+C28 g3 p3 0.25fF
+C29 p1 g1 0.25fF
+C30 p3 a_17_4# 0.09fF
+C31 w_4_38# p2 0.17fF
+C32 p2 a_17_4# 0.08fF
+C33 p1 a_49_48# 0.08fF
+C34 g1 a_25_4# 0.08fF
+C35 a_49_48# g0 0.08fF
+C36 w_4_38# p1 0.17fF
+C37 w_4_38# g0 0.17fF
+C38 p1 a_17_4# 0.08fF
+C39 a_17_4# g0 0.08fF
+C40 a_41_4# a_57_4# 0.26fF
+C41 w_86_40# vdd 0.12fF
+C42 c4 a_17_4# 0.05fF
+C43 a_17_4# a_25_4# 0.66fF
+C44 gnd c4 0.25fF
+C45 w_4_38# g1 0.17fF
+C46 g2 a_17_48# 0.08fF
+C47 gnd a_25_4# 0.26fF
+C48 a_17_4# g1 0.08fF
+C49 p2 a_33_48# 0.08fF
+C50 w_4_38# a_49_48# 0.14fF
+C51 a_17_48# vdd 0.80fF
+C52 p3 a_17_48# 0.08fF
+C53 p2 a_17_48# 0.08fF
+C54 w_4_38# g3 0.17fF
+C55 a_41_4# p1 0.02fF
+C56 a_33_48# p1 0.08fF
+C57 w_4_38# a_17_4# 0.08fF
+C58 a_41_4# g0 0.02fF
+C59 w_86_40# c4 0.08fF
+C60 gnd a_17_4# 0.25fF
+C61 a_41_4# a_25_4# 0.32fF
+C62 a_41_4# g1 0.02fF
+C63 a_33_48# g1 0.08fF
+C64 a_33_48# a_49_48# 0.91fF
+C65 a_57_4# Gnd 0.01fF
+C66 a_41_4# Gnd 0.13fF
+C67 a_25_4# Gnd 0.10fF
+C68 gnd Gnd 0.52fF
+C69 c4 Gnd 0.05fF
+C70 a_49_48# Gnd 0.00fF
+C71 a_33_48# Gnd 0.00fF
+C72 a_17_48# Gnd 0.00fF
+C73 vdd Gnd 0.14fF
+C74 a_17_4# Gnd 0.32fF
+C75 g0 Gnd 0.08fF
+C76 p1 Gnd 0.08fF
+C77 g1 Gnd 0.08fF
+C78 p2 Gnd 0.08fF
+C79 g2 Gnd 0.08fF
+C80 p3 Gnd 0.08fF
+C81 g3 Gnd 0.08fF
+C82 w_86_40# Gnd 1.51fF
+C83 w_4_38# Gnd 4.99fF
+
+.tran 100ps 60ns
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_C4_computation"
+plot v(c4) 2+v(g3) 4+V(p3) 8+v(g2) 10+v(p2) 12+v(g1) 14+(p1) 16+v(g0)
+.endc

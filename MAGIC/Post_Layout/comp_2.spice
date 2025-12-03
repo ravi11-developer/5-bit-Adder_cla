@@ -1,0 +1,77 @@
+* SPICE3 file created from comp2_label.ext - technology: scmos
+
+.include TSMC_180nm.txt
+.option scale=0.09u
+.global gnd Vdd
+
+vdd vdd gnd 1.8
+
+* Input Signals
+Va1 g1 gnd 0V
+Va2 p1 gnd PULSE(0 1.8 0ns 0ns 0ns 10ns 20ns)
+Va3 g0 gnd PULSE(0 1.8 2ns 0ns 0ns 5ns 10ns)
+
+M1000 a_17_48# g0 a_17_8# w_4_38# CMOSP w=40 l=2
++  ad=440 pd=182 as=240 ps=92
+M1001 a_25_8# p1 a_17_8# Gnd CMOSN w=20 l=2
++  ad=120 pd=52 as=120 ps=52
+M1002 a_17_48# g1 vdd w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=400 ps=180
+M1003 gnd g0 a_25_8# Gnd CMOSN w=20 l=2
++  ad=300 pd=150 as=0 ps=0
+M1004 c2 a_17_8# gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=0 ps=0
+M1005 a_17_8# p1 a_17_48# w_4_38# CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1006 c2 a_17_8# vdd w_58_38# CMOSP w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1007 a_17_8# g1 gnd Gnd CMOSN w=20 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 a_17_48# vdd 0.81fF
+C1 a_17_8# p1 0.08fF
+C2 g0 vdd 0.13fF
+C3 a_17_8# w_4_38# 0.04fF
+C4 w_58_38# vdd 0.15fF
+C5 a_25_8# gnd 0.25fF
+C6 a_17_8# a_17_48# 0.82fF
+C7 a_17_8# gnd 0.33fF
+C8 g1 p1 0.23fF
+C9 a_17_8# g0 0.08fF
+C10 c2 gnd 0.25fF
+C11 w_4_38# p1 0.18fF
+C12 g1 w_4_38# 0.18fF
+C13 a_17_8# w_58_38# 0.09fF
+C14 c2 vdd 0.41fF
+C15 w_58_38# c2 0.08fF
+C16 a_17_48# p1 0.08fF
+C17 a_17_8# a_25_8# 0.25fF
+C18 a_17_48# w_4_38# 0.15fF
+C19 g0 p1 0.23fF
+C20 vdd p1 0.13fF
+C21 g0 w_4_38# 0.18fF
+C22 g1 vdd 0.13fF
+C23 a_17_8# c2 0.05fF
+C24 w_4_38# vdd 0.17fF
+C25 g0 a_17_48# 0.08fF
+C26 a_25_8# Gnd 0.01fF
+C27 gnd Gnd 0.37fF
+C28 c2 Gnd 0.09fF
+C29 a_17_48# Gnd 0.00fF
+C30 vdd Gnd 0.11fF
+C31 a_17_8# Gnd 0.29fF
+C32 g0 Gnd 0.08fF
+C33 p1 Gnd 0.08fF
+C34 g1 Gnd 0.08fF
+C35 w_58_38# Gnd 1.73fF
+C36 w_4_38# Gnd 2.84fF
+
+.tran 100ps 60ns
+
+.control
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_C2_Computation"
+plot v(g1) 2+v(p1) 4+V(g0) 8+v(c2)
+.endc
+

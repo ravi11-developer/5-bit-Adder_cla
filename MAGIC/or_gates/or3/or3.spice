@@ -1,0 +1,62 @@
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.option scale=90n
+.global gnd vdd
+
+Vdd vdd gnd 'SUPPLY'
+
+M1000 out nout vdd vdd CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=50u
+M1001 out nout gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=30u
+M1002 nout a gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=20u as=50p ps=30u
+M1003 nout c gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=20u
+M1004 gnd b nout Gnd CMOSN w=10 l=2
++  ad=50p pd=20u as=50p ps=20u
+M1005 a_n9_n23# a vdd vdd CMOSP w=60 l=2
++  ad=0.3n pd=70u as=0.3n ps=0.13m
+M1006 nout c a_3_n23# vdd CMOSP w=60 l=2
++  ad=0.3n pd=0.13m as=0.3n ps=70u
+M1007 a_3_n23# b a_n9_n23# vdd CMOSP w=60 l=2
++  ad=0.3n pd=70u as=0.3n ps=70u
+C0 nout gnd 0.553421f
+C1 c gnd 0.001976f
+C2 b nout 0.00877f
+C3 vdd a_3_n23# 1.36e-19
+C4 b c 0.341485f
+C5 vdd b 0.019908f
+C6 out gnd 0.130598f
+C7 c nout 0.359487f
+C8 a gnd 0.001614f
+C9 vdd nout 0.029961f
+C10 a b 0.176533f
+C11 vdd c 0.019908f
+C12 nout out 0.060313f
+C13 b gnd 0.001976f
+C14 vdd out 0.215514f
+C15 a nout 0.002541f
+C16 vdd a_n9_n23# 1.36e-19
+C17 a c 0.007681f
+C18 vdd a 0.02078f
+C19 gnd 0 0.217377f 
+C20 out 0 0.109428f 
+C21 nout 0 0.532412f 
+C22 c 0 0.346649f 
+C23 b 0 0.316028f 
+C24 a 0 0.305983f 
+C25 vdd 0 5.98285f 
+
+va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
+vc c gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
+
+.tran  0.01n 100ns
+.control
+run
+plot v(a) v(b)+2 v(c)+4 v(out)+6
+set hcopypscolor = 1
+set color0=white
+set color1=black
+.endc

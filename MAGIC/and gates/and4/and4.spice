@@ -1,0 +1,81 @@
+* SPICE3 file created from and4.ext - technology: scmos
+
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.option scale=90n
+.global gnd vdd
+
+Vdd vdd gnd 'SUPPLY'
+
+M1000 nout b vdd vdd CMOSP w=20 l=2
++  ad=100p pd=30u as=100p ps=30u
+M1001 vdd a nout vdd CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=30u
+M1002 a_12_n84# b a_0_n84# Gnd CMOSN w=40 l=2
++  ad=0.2n pd=50u as=0.2n ps=50u
+M1003 a_n12_n84# d gnd Gnd CMOSN w=40 l=2
++  ad=0.2n pd=50u as=0.2n ps=90u
+M1004 out nout gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=30u
+M1005 nout a a_12_n84# Gnd CMOSN w=40 l=2
++  ad=0.2n pd=90u as=0.2n ps=50u
+M1006 vdd c nout vdd CMOSP w=20 l=2
++  ad=100p pd=30u as=100p ps=30u
+M1007 a_0_n84# c a_n12_n84# Gnd CMOSN w=40 l=2
++  ad=0.2n pd=50u as=0.2n ps=50u
+M1008 nout d vdd vdd CMOSP w=20 l=2
++  ad=100p pd=30u as=100p ps=50u
+M1009 out nout vdd vdd CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=50u
+C0 a a_n12_n84# 2.83e-19
+C1 nout gnd 0.467535f
+C2 c gnd 9.67e-19
+C3 a nout 0.071787f
+C4 c a 0.007681f
+C5 d nout 0.05934f
+C6 vdd out 0.25121f
+C7 vdd b 0.023357f
+C8 d c 0.187419f
+C9 gnd a_0_n84# 1.13e-19
+C10 out gnd 0.123714f
+C11 a a_0_n84# 2.83e-19
+C12 b gnd 9.67e-19
+C13 c nout 0.134701f
+C14 b a 0.517726f
+C15 d b 0.007278f
+C16 vdd a 0.022874f
+C17 vdd d 0.023043f
+C18 gnd a_12_n84# 1.13e-19
+C19 a a_12_n84# 1.7e-19
+C20 a gnd 0.05598f
+C21 nout out 0.060313f
+C22 d gnd 0.001936f
+C23 b nout 0.010987f
+C24 c b 0.352371f
+C25 d a 0.007681f
+C26 vdd nout 0.992749f
+C27 vdd c 0.023357f
+C28 gnd a_n12_n84# 1.13e-19
+C29 gnd 0 0.454613f 
+C30 out 0 0.10379f 
+C31 nout 0 0.452521f 
+C32 a 0 0.39333f 
+C33 b 0 0.333722f 
+C34 c 0 0.311935f 
+C35 d 0 0.30779f 
+C36 vdd 0 3.76134f 
+
+
+va a gnd pulse 0 1.8 0 0.1n 0.1n 5n 10n
+vb b gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+vc c gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
+vd d gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
+.tran 0.01n 120n
+
+.control
+run
+plot v(a) v(b)+2 v(c)+4 v(d)+6 v(out)+8
+set hcopypscolor = 1
+set color0=white
+set color1=black
+.endc

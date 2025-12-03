@@ -1,0 +1,35 @@
+* SPICE3 file created from inv.ext - technology: scmos
+
+.include TSMC_180nm.txt
+.global gnd vdd
+.option scale=0.09u
+
+vdd vdd gnd 1.8
+va inv_ip gnd PULSE(0 1.8 3ns 0ns 0ns 5ns 10ns)
+
+M1000 inv_op inv_ip vdd w_0_0# CMOSP w=40 l=2
++  ad=200 pd=90 as=200 ps=90
+M1001 inv_op inv_ip gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=100 ps=50
+C0 vdd w_0_0# 0.12fF
+C1 inv_ip w_0_0# 0.09fF
+C2 inv_ip gnd 0.04fF
+C3 inv_op w_0_0# 0.08fF
+C4 vdd inv_op 0.44fF
+C5 inv_ip inv_op 0.05fF
+C6 inv_op gnd 0.25fF
+C7 gnd Gnd 0.12fF
+C8 inv_op Gnd 0.09fF
+C9 vdd Gnd 0.03fF
+C10 inv_ip Gnd 0.17fF
+C11 w_0_0# Gnd 1.51fF
+
+.tran 0.1ns 50ns
+.control 
+run
+set color0 = white
+set xbrushwidth = 3
+set curplottitle = "Aditya_Peketi_2024122001_inverter"
+plot v(inv_op) 2+v(inv_ip)
+.endc
+
