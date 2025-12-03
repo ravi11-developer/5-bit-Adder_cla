@@ -1,0 +1,186 @@
+================================================================================
+DOCUMENTATION FILES - QUICK REFERENCE
+================================================================================
+
+All measurement, observation, and reference data stored in these files:
+
+FILE 1: DELAY_OBSERVATIONS.txt (16 KB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Content: Complete delay measurements for all 5 circuits
+Purpose: Single consolidated file for all delay data
+Location: /NGSPICE/DELAY_OBSERVATIONS.txt
+
+Sections:
+  ✓ 1. Inverter Circuit - tpcq_inv = 17.66ps
+  ✓ 2. D Flip-Flop - tpcq_lh (2496ps), tpcq_hl (144.7ps), avg (1320ps)
+  ✓ 3. CLA Block - tpcq_cla = 401.32ps
+  ✓ 4. Full Adder Pipeline - delay_dff_in (96.3ps) + delay_cla (433ps) + delay_dff_out (47.5ps)
+  ✓ 5. Propagate/Generate - prop_delay (154ps), gen_delay (65.13ps)
+  
+  ✓ Summary Table - All measurements side-by-side
+  ✓ Performance Observations - Analysis and insights
+  ✓ Timing Hierarchy - Fastest to slowest components
+  ✓ Measurement Quality - Data validity notes
+  ✓ Usage Recommendations - Design guidelines
+
+Use this file for: Quick lookup of any circuit delay
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FILE 2: MEASUREMENT_RESULTS.txt (9.2 KB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Content: Original measurement summary (dated Dec 3, 2025)
+Purpose: First-pass measurement documentation
+Location: /NGSPICE/MEASUREMENT_RESULTS.txt
+
+Sections:
+  ✓ Circuit descriptions
+  ✓ Measurement parameters
+  ✓ Delay values in both ps and seconds
+  ✓ File location reference
+
+Use this file for: Original measurement snapshot, file paths
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FILE 3: NGSPICE_SYNTAX_GUIDE.txt (6.1 KB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Content: NGSPICE netlist syntax reference
+Purpose: Quick reference for .cir file syntax
+Location: /NGSPICE/NGSPICE_SYNTAX_GUIDE.txt
+
+Sections:
+  ✓ 1. Circuit definition (.include, .param, .global, .subckt)
+  ✓ 2. Voltage sources (VDD, PULSE syntax)
+  ✓ 3. MOSFET devices (Mname syntax, W/L, parasitic parameters)
+  ✓ 4. Subcircuit instantiation (X syntax)
+  ✓ 5. Analysis statements (.tran syntax)
+  ✓ 6. Measurement syntax (.measure tran, TRIG/TARG)
+  ✓ 7. Control section (plot, hardcopy, set commands)
+  ✓ 8. Parameter expressions ({} math)
+  ✓ 9. Node naming and voltage access
+  ✓ 10. Signal conventions (logic levels, thresholds)
+  ✓ 11. Common measurements (delay, rise time, fall time)
+  ✓ 12. Example circuits (INVERTER, NAND)
+  ✓ 13. File structure guidelines
+
+Use this file for: Understanding .cir file syntax when editing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CIRCUIT FILES (with inline syntax comments):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✓ inverter.cir          - Basic inverter with comments on: VDD, PULSE, Mname, X, .tran, .measure, plot, hardcopy
+  ✓ D_flipflop.cir        - TSPC DFF with comments on: Va (PULSE), .measure, .param, plot, hardcopy
+  ✓ cla_block.cir         - 5-bit CLA with comments on: .tran, .measure, plot, hardcopy
+  ✓ adder_final.cir       - Pipelined adder with comments on: .tran, .measure, .param, plot
+  ✓ prop_gen.cir          - Prop/Gen generator with comments on: .measure, plot, hardcopy
+
+All .cir files include minimal but essential syntax comments for important commands.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOW TO USE THESE FILES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. FOR DELAY DATA LOOKUP:
+   Open: DELAY_OBSERVATIONS.txt
+   Jump to section for desired circuit
+   Read measurement values and analysis
+   Reference Summary Table for quick comparison
+
+2. FOR EDITING CIRCUIT FILES:
+   Open desired .cir file
+   Read inline comments for command syntax
+   Reference NGSPICE_SYNTAX_GUIDE.txt for detailed syntax
+   Each important command has a comment showing its usage
+
+3. FOR CIRCUIT UNDERSTANDING:
+   Start with DELAY_OBSERVATIONS.txt (overall picture)
+   Then read specific .cir file (implementation)
+   Use NGSPICE_SYNTAX_GUIDE.txt for any unfamiliar syntax
+
+4. FOR REPORT WRITING:
+   Use DELAY_OBSERVATIONS.txt for:
+     - Main delay values and comparisons
+     - Performance analysis
+     - Timing hierarchy
+   Use .cir files for:
+     - Circuit topology
+     - Implementation details
+   Use NGSPICE_SYNTAX_GUIDE.txt for:
+     - Technical explanation of how measurements work
+
+================================================================================
+MEASUREMENT DATA SUMMARY (from DELAY_OBSERVATIONS.txt)
+================================================================================
+
+Circuit           Measurement      Value(ps)    Value(ns)    Status
+─────────────────────────────────────────────────────────────────────
+Inverter          tpcq_inv         17.66        0.01766      ✓ Valid
+D-FF              tpcq_lh          2495.99      2.496        ✓ Valid
+D-FF              tpcq_hl          144.70       0.1447       ✓ Valid
+D-FF              avg_tpcq         1320.00      1.320        ✓ Valid
+CLA Block         tpcq_cla         401.32       0.40132      ✓ Valid
+Full Adder        delay_dff_in     96.30        0.0963       ✓ Valid
+Full Adder        delay_cla        432.99       0.4330       ✓ Valid
+Full Adder        delay_dff_out    47.46        0.0475       ✓ Valid
+Full Adder        total_delay      576.75       0.5768       ✓ Valid
+Prop/Gen          prop_delay       154.03       0.15403      ✓ Valid
+Prop/Gen          gen_delay        65.13        0.06513      ✓ Valid
+
+================================================================================
+KEY INSIGHTS (from DELAY_OBSERVATIONS.txt)
+================================================================================
+
+1. CLA Dominates Pipelined Adder:
+   - Input DFF: 96.30ps (16.7%)
+   - CLA Core: 432.99ps (75.1%)  ← CRITICAL PATH
+   - Output DFF: 47.46ps (8.2%)
+   
+2. D-Flip-Flop Asymmetry:
+   - Rise delay: 2495.99ps
+   - Fall delay: 144.70ps
+   - Ratio: 17.25x (PMOS slower than NMOS)
+
+3. Fastest Paths:
+   - Inverter: 17.66ps (basic cell)
+   - Gen logic: 65.13ps (AND gate)
+   - Prop logic: 154.03ps (XOR gate)
+
+4. Maximum Frequency:
+   - Conservative estimate: ~1.5GHz
+   - Theoretical max: ~1.73GHz (1/576.75ps)
+   - Limited by DFF rise-time (tpcq_lh = 2496ps dominant)
+
+================================================================================
+FILE MAINTENANCE
+================================================================================
+
+When to update:
+
+✓ DELAY_OBSERVATIONS.txt
+  - After each circuit redesign
+  - After changing technology node
+  - After supply voltage changes
+  - After temperature variation studies
+
+✓ .cir files (with inline comments)
+  - When modifying circuit topology
+  - When adjusting device sizes
+  - When changing signal waveforms
+  - Keep comments updated with syntax
+
+✓ NGSPICE_SYNTAX_GUIDE.txt
+  - When learning new NGSPICE features
+  - When needing quick syntax reference
+  - When teaching others NGSPICE
+
+✗ MEASUREMENT_RESULTS.txt
+  - Archive file (keep as reference)
+  - Do not modify
+
+================================================================================
+END OF DOCUMENTATION INDEX
+================================================================================

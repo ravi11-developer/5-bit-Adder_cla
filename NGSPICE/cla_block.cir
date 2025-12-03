@@ -421,3 +421,4 @@ plot v(a0) 2+v(a1) 4+v(a2) 6+v(a3) 8+v(a4) 10+v(b0) 12+v(b1) 14+v(b2) 16+v(b3) 1
 hardcopy cla_block_inputs.ps v(a0) 2+v(a1) 4+v(a2) 6+v(a3) 8+v(a4) 10+v(b0) 12+v(b1) 14+v(b2) 16+v(b3) 18+v(b4)
 plot v(s0) 2+v(s1) 4+v(s2) 6+v(s3) 8+v(s4) 10+v(c5)
 hardcopy cla_block_outputs.ps v(s0) 2+v(s1) 4+v(s2) 6+v(s3) 8+v(s4) 10+v(c5)
+.endc
