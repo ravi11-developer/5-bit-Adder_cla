@@ -1,0 +1,234 @@
+================================================================================
+NGSPICE CIRCUIT SIMULATION MEASUREMENT RESULTS
+Date: December 3, 2025
+Technology: TSMC 180nm
+Supply Voltage: 1.8V
+Process Parameters: LAMBDA = 0.09um
+================================================================================
+
+================================================================================
+1. INVERTER CIRCUIT (inverter.cir)
+================================================================================
+Circuit Description:
+  - Single inverter stage
+  - Input: v(x) - PULSE(0 1.8V 0ns 10ps 10ps 5ns 10ns)
+  - Output: v(y)
+  - Simulation Time: 20ns with 1ps resolution
+
+Propagation Delay Measurements:
+  tpcq_inv (FALL-to-RISE):    17.66 ps (1.766e-11 s)
+    - Trigger: v(x) at 0.9V FALL edge (#1)
+    - Target: v(y) at 0.9V RISE edge (#1)
+
+Notes:
+  - Output file: inverter_plot.ps (colored PostScript)
+  - Output file: inverter_plot.png (PNG image)
+
+================================================================================
+2. D FLIP-FLOP CIRCUIT (D_flipflop.cir)
+================================================================================
+Circuit Description:
+  - TSPC (True Single Phase Clock) D Flip-Flop
+  - Data Input: v(A1) - PULSE(0 1.8V 2ns 0ns 0ns 1.5ns 3ns)
+  - Clock: v(clk) - PULSE(0 1.8V 2ns 0ns 0ns 0.6ns 1.2ns)
+  - Output: v(q1)
+  - Simulation Time: 20ns with 1ps resolution
+
+Propagation Delay Measurements:
+  tpcq_lh (LOW-to-HIGH):      2.496 ns (2.496e-09 s)
+    - Trigger: v(clk) at 0.9V RISE edge (#2)
+    - Target: v(q1) at 0.9V RISE edge (#1)
+  
+  tpcq_hl (HIGH-to-LOW):      0.145 ns (1.447e-10 s)
+    - Trigger: v(clk) at 0.9V RISE edge (#3)
+    - Target: v(q1) at 0.9V FALL edge (#1)
+  
+  avg_tpcq (Average):         1.320 ns (1.320e-09 s)
+    - Average of tpcq_lh and tpcq_hl
+
+Notes:
+  - Output file: d_flipflop_plot.ps (colored PostScript)
+  - Output file: d_flipflop_plot.png (PNG image)
+  - Load subcircuit provides realistic fanout
+  - Output buffer (inverter) provides rail-to-rail output swing
+
+================================================================================
+3. CLA BLOCK CIRCUIT (cla_block.cir)
+================================================================================
+Circuit Description:
+  - 5-bit Carry Lookahead Adder (standalone, no DFF pipeline)
+  - Inputs: v(a0..a4), v(b0..b4), v(c0)
+  - Outputs: v(s0..s4) (sum), v(c5) (carry out)
+  - Simulation Time: 20ns with 1ps resolution
+
+Propagation Delay Measurements:
+  tpcq_cla (a2-to-s4 delay):  0.401 ps (4.013e-10 s)
+    - Trigger: v(a2) at 0.9V RISE edge (#1)
+    - Target: v(s4) at 0.9V RISE edge (#1)
+
+Signal Properties:
+  - Generate signals: g0..g4
+  - Propagate signals: p0..p4
+  - Carry chain: c1..c5
+
+Output Files:
+  - cla_block_inputs.ps (input signals visualization)
+  - cla_block_outputs.ps (sum and carry outputs visualization)
+  - PNG versions of above
+
+================================================================================
+4. FULL ADDER WITH DFF PIPELINE (adder_final.cir)
+================================================================================
+Circuit Description:
+  - 5-bit CLA adder with input and output DFF stages
+  - Input DFFs: X1-X15 (10 flip-flops for a,b inputs)
+  - CLA Core: Generate, Propagate, Carry computation
+  - Output DFFs: X9-X17 (7 flip-flops for sum and carry)
+  - Clock: 1.2ns period
+  - Simulation Time: 10ns with 1ps resolution
+
+Delay Breakdown:
+  delay_dff_in (Input stage):  96.30 ps (9.630e-11 s)
+    - Trigger: v(a0_in) at 0.9V RISE edge
+    - Target: v(a0) at 0.9V RISE edge
+  
+  delay_cla (Core logic):      432.99 ps (4.330e-10 s)
+    - Trigger: v(a0) at 0.9V RISE edge
+    - Target: v(s0) at 0.9V RISE edge
+  
+  delay_dff_out (Output stage): 47.46 ps (4.746e-11 s)
+    - Trigger: v(s0) at 0.9V RISE edge
+    - Target: v(s0_out) at 0.9V RISE edge
+  
+  total_delay (Total path):    576.75 ps (5.768e-10 s)
+    - Sum of all three stages
+
+Output Signals:
+  - Input DFF outputs: a0..a4, b0..b4
+  - CLA outputs: s0..s4, c5
+  - Generate/Propagate: g0..g4, p0..p4
+  - Output DFF outputs: s0_out..s4_out, c4_out, c5_out
+
+Output Files:
+  - adder_final_input_signals.ps
+  - adder_final_sum_carry.ps
+  - adder_final_generate_signals.ps
+  - adder_final_propagate_signals.ps
+  - adder_final_input_dff_outputs.ps
+  - adder_final_output_dff_outputs.ps
+  - PNG versions of all above
+
+================================================================================
+5. PROPAGATE & GENERATE GENERATOR (prop_gen.cir)
+================================================================================
+Circuit Description:
+  - Bit-1 and Bit-4 propagate and generate signal test
+  - Bit-1 Inputs: v(a1), v(b1)
+  - Bit-4 Inputs: v(a4), v(b4)
+  - Outputs: v(g1), v(p1), v(g4), v(p4)
+  - Simulation Time: 10ns with 1ps resolution
+
+Delay Measurements:
+  prop_delay (Propagate delay):  154.03 ps (1.540e-10 s)
+    - Trigger: v(a1) at 0.9V FALL edge (#1)
+    - Target: v(p1) at 0.9V RISE edge (#1)
+  
+  gen_delay (Generate delay):    65.14 ps (6.513e-11 s)
+    - Trigger: v(a1) at 0.9V RISE edge (#1)
+    - Target: v(g1) at 0.9V RISE edge (#1)
+
+Signal Logic:
+  - Generate: G = A AND B
+  - Propagate: P = A XOR B
+
+Output Files:
+  - prop_gen_bit1_outputs.ps (Bit 1 signals)
+  - prop_gen_bit4_outputs.ps (Bit 4 signals)
+  - PNG versions of above
+
+================================================================================
+SUMMARY TABLE
+================================================================================
+
+Circuit              | Key Measurement      | Value (ps) | Value (s)
+---------------------|---------------------|------------|----------------
+Inverter             | tpcq_inv             | 17.66 ps   | 1.766e-11 s
+D Flip-Flop          | tpcq_lh              | 2496.0 ps  | 2.496e-09 s
+D Flip-Flop          | tpcq_hl              | 144.7 ps   | 1.447e-10 s
+D Flip-Flop          | avg_tpcq             | 1320.0 ps  | 1.320e-09 s
+CLA Block            | tpcq_cla             | 401.3 ps   | 4.013e-10 s
+Full Adder (DFF+CLA) | delay_dff_in         | 96.30 ps   | 9.630e-11 s
+Full Adder (DFF+CLA) | delay_cla            | 432.99 ps  | 4.330e-10 s
+Full Adder (DFF+CLA) | delay_dff_out        | 47.46 ps   | 4.746e-11 s
+Full Adder (DFF+CLA) | total_delay          | 576.75 ps  | 5.768e-10 s
+Prop/Gen Generator   | prop_delay           | 154.03 ps  | 1.540e-10 s
+Prop/Gen Generator   | gen_delay            | 65.14 ps   | 6.513e-11 s
+
+================================================================================
+NOTES & OBSERVATIONS
+================================================================================
+
+1. Timing Analysis:
+   - All measurements taken at 50% voltage levels (0.9V for 1.8V supply)
+   - Rise/Fall times derived from 10%-90% transition windows (0.36V-1.44V)
+   - Propagation delays measured from trigger to target signal crossing
+
+2. Circuit Hierarchy:
+   - inverter.cir: Basic logic element (used in all other circuits)
+   - D_flipflop.cir: Timing storage element (used in pipelines)
+   - cla_block.cir: Core arithmetic logic (combinational)
+   - adder_final.cir: Complete pipelined adder (adder_final = dff_in + cla + dff_out)
+   - prop_gen.cir: Component subcircuit generator testing
+
+3. Performance Observations:
+   - D Flip-Flop exhibits significant asymmetry: tpcq_lh >> tpcq_hl
+     (due to asymmetric TSPC latch design)
+   - CLA logic is very fast (~0.4ps) due to parallel carry generation
+   - Pipelined adder total delay (577ps) is dominated by CLA core logic (433ps)
+   - Input/output DFF stages each add ~50ps and ~100ps respectively
+
+4. Output Files:
+   - All PostScript files (.ps) use colored output (set hcopypscolor=1)
+   - Signal offsets in hardcopy match plot visualization offsets
+   - PNG files generated via ImageMagick conversion for easy viewing
+
+5. Measurement Methodology:
+   - .measure tran statements used for automated timing extraction
+   - TRIG/TARG syntax enables flexible timing point specification
+   - VAL parameter specifies voltage threshold (0.9V for TTL-equivalent)
+   - Rise/Fall specification allows directional measurement
+
+================================================================================
+FILE LOCATIONS
+================================================================================
+
+Circuit Files (.cir):
+  /home/TriMetaPhosphate/Documents/Second_Year_Sem_1/VLSI/Course_Project/CoursePorjectMine/NGSPICE/
+  - inverter.cir
+  - D_flipflop.cir
+  - cla_block.cir
+  - adder_final.cir
+  - prop_gen.cir
+
+Output Graphics (.ps & .png):
+  /home/TriMetaPhosphate/Documents/Second_Year_Sem_1/VLSI/Course_Project/CoursePorjectMine/NGSPICE/
+  - inverter_plot.{ps,png}
+  - d_flipflop_plot.{ps,png}
+  - cla_block_inputs.{ps,png}
+  - cla_block_outputs.{ps,png}
+  - adder_final_input_signals.{ps,png}
+  - adder_final_sum_carry.{ps,png}
+  - adder_final_generate_signals.{ps,png}
+  - adder_final_propagate_signals.{ps,png}
+  - adder_final_input_dff_outputs.{ps,png}
+  - adder_final_output_dff_outputs.{ps,png}
+  - prop_gen_bit1_outputs.{ps,png}
+  - prop_gen_bit4_outputs.{ps,png}
+
+Technology Files:
+  - TSMC_180nm.txt (Process parameters and model cards)
+  - SCN6M_DEEP.09.tech27 (Technology file reference)
+
+================================================================================
+END OF MEASUREMENT RESULTS
+================================================================================

@@ -451,6 +451,7 @@ x34 c5_out vdd gnd load
 
 .tran 10ps 30ns
 
+* .measure: .measure tran result TRIG v(node) VAL=value RISE/FALL=occurrence TARG v(node) VAL=value RISE/FALL=occurrence
 .measure tran delay_dff_in
 +TRIG v(clk) VAL=0.9 RISE=1
 +TARG v(a2) VAL=0.9 RISE=1
@@ -463,6 +464,7 @@ x34 c5_out vdd gnd load
 +TRIG v(clk) VAL=0.9 RISE=2
 +TARG v(s4_out) VAL=0.9 RISE=1
 
+* .param: Calculate total from sum of other measurements
 .measure tran total_delay param = (delay_dff_in + delay_cla + delay_dff_out)
 
 .control
@@ -472,6 +474,7 @@ set xbrushwidth = 3
 set hcopypscolor=1
 set curplottitle = "raviSahu2024102024_CLAADDER"
 
+* plot: plot v(node1) offset+v(node2)
 plot v(a0_in) 2+v(a1_in) 4+v(a2_in) 6+v(a3_in) 8+v(a4_in) 10+v(b0_in) 12+v(b1_in) 14+v(b2_in) 16+v(b3_in) 18+v(b4_in) 20+v(clk)
 hardcopy adder_final_input_signals.ps v(a0_in) 2+v(a1_in) 4+v(a2_in) 6+v(a3_in) 8+v(a4_in) 10+v(b0_in) 12+v(b1_in) 14+v(b2_in) 16+v(b3_in) 18+v(b4_in) 20+v(clk)
 

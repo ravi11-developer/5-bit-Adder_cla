@@ -1,4 +1,4 @@
-*cla_adder
+* INVERTER CIRCUIT
 .include TSMC_180nm.txt
 .param LAMBDA = 0.09u
 .param SUPPLY = 1.8v
@@ -7,14 +7,17 @@
 .param WIDTH_P = {2*W} 
 .global gnd Vdd
 
+* VDD: Vsource nodeName gnd DCvoltage
 VDD Vdd gnd DC 'SUPPLY'
 
+* Va0: Vasource nodeName gnd PULSE(V1 V2 delay rise fall width period)
 Va0 x gnd PULSE(0 1.8 0ns 10ps 10ps 5ns 10ns)
 
 .subckt inverter ip op vdd gnd S=1
 .param w_p = {2*W}
 .param w_n = {W}
 
+* Mname: Mname drain gate source bulk modelname W=width L=length
 Minv1 op ip vdd vdd CMOSP W={S*w_p} L={2*LAMBDA} 
 + AS={S*5*w_p*LAMBDA} PS={10*LAMBDA+S*2*w_p} 
 + AD={S*5*w_p*LAMBDA} PD={10*LAMBDA+S*2*w_p}
@@ -24,10 +27,13 @@ Minv2 op ip gnd gnd CMOSN W={S*w_n} L={2*LAMBDA}
 + AD={S*5*w_n*LAMBDA} PD={10*LAMBDA+S*2*w_n}
 .ends inverter
 
+* X: Xname node1 node2 node3 node4 subcktName
 X1 x y vdd gnd inverter
 
+* .tran: .tran timestep stoptime
 .tran 1ps 20ns
 
+* .measure: .measure tran result TRIG v(node) VAL=value RISE/FALL=occurrence TARG v(node) VAL=value RISE/FALL=occurrence
 .measure tran tpcq_inv
 +TRIG v(x) VAL=0.9 FALL=1
 +TARG v(y) VAL=0.9 RISE=1
@@ -38,6 +44,8 @@ set color0 = white
 set xbrushwidth = 3
 set hcopypscolor=1
 set curplottitle = "raviSahu2024102024_CLAADDER"
+* plot: plot v(node1) offset+v(node2)
 plot v(y) 4+v(x)
+* hardcopy: hardcopy filename v(node1) offset+v(node2)
 hardcopy inverter_plot.ps v(y) 4+v(x)
 .endc

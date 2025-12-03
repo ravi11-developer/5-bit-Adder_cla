@@ -1,4 +1,4 @@
-* TSPC D Flip-Flop NGSPICE Code
+* TSPC D FLIP-FLOP
 .include TSMC_180nm.txt
 .param LAMBDA = 0.09u
 .param SUPPLY = 1.8v
@@ -9,7 +9,7 @@
 
 VDD Vdd gnd DC 'SUPPLY'
 
-* Input Signals
+* Va: Vasource nodeName gnd PULSE(V1 V2 delay rise fall width period)
 Va1 A1 gnd PULSE(0 1.8 2ns 0ns 0ns 1.5ns 3ns)
 VS clk gnd PULSE (0 1.8 2ns 0ns 0ns 0.6ns 1.2ns)
 
@@ -75,6 +75,8 @@ M2 dont_care in gnd gnd CMOSN W={width_N} L={2*LAMBDA}
 
 X1 A1 q1 clk Vdd gnd TSPC_DFF
 X2 q1 dont_care_m vdd gnd inverter
+
+* .measure: .measure tran result TRIG v(node) VAL=value RISE/FALL=occurrence TARG v(node) VAL=value RISE/FALL=occurrence
 .measure tran tpcq_lh
 + TRIG v(clk) VAL=0.9 RISE=2
 + TARG v(q1) VAL=0.9 RISE=1
@@ -83,6 +85,7 @@ X2 q1 dont_care_m vdd gnd inverter
 + TRIG v(clk) VAL=0.9 RISE=3
 + TARG v(q1) VAL=0.9 FALL=1
 
+* .param: Calculate average from previous measurements
 .measure tran avg_tpcq param = ((tpcq_lh + tpcq_hl)/2)
 
 .tran 1ps 20ns
@@ -92,6 +95,8 @@ set curplottitle = "raviSahu2024102024_CLAADDER"
 set color0 = white
 set xbrushwidth = 3
 set hcopypscolor=1
+* plot: plot v(node1) offset+v(node2)
 plot v(q1) 2+v(A1) 4+v(clk)
+* hardcopy: hardcopy filename v(node1) offset+v(node2)
 hardcopy D_flipflop_plot.ps v(q1) 2+v(A1) 4+v(clk) v(q1) v(A1) v(clk)
 .endc

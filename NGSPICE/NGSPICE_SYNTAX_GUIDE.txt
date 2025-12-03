@@ -1,0 +1,144 @@
+================================================================================
+NGSPICE CIRCUIT SYNTAX GUIDE - QUICK REFERENCE
+================================================================================
+
+1. CIRCUIT DEFINITION
+================================================================================
+.include filename              # Include technology/model files
+.param name = value            # Define parameters (use {} for math: {20*LAMBDA})
+.global node1 node2            # Declare global nodes (Vdd, gnd)
+.subckt name in1 in2 ... out   # Define reusable subcircuit
+.ends                          # End subcircuit definition
+
+2. VOLTAGE SOURCES
+================================================================================
+VDD Vdd gnd DC 1.8             # DC source: VDD nodeName refNode DCvoltage
+Va0 x gnd PULSE(V1 V2 t_delay t_rise t_fall t_width t_period)
+                               # PULSE: Initial_V Pulse_V Delay Rise Fall Width Period
+
+3. MOSFET DEVICES
+================================================================================
+Mname drain gate source bulk modelname W=width L=length AS=area AD=area PS=perim PD=perim
+Minv1 op ip vdd vdd CMOSP W=40n L=180n
+      ^^  ^^  ^^^  ^^^  ^^^^^
+      out inp Vdd Vdd PMOS_model
+      
+Minv2 op ip gnd gnd CMOSN W=20n L=180n
+      ^^  ^^  ^^^  ^^^  ^^^^^
+      out inp Gnd Gnd NMOS_model
+
+Models: CMOSP=PMOS, CMOSN=NMOS (from TSMC_180nm.txt)
+Parameters: W=channel width, L=channel length, AS/AD=source/drain area, PS/PD=perimeter
+
+4. SUBCIRCUIT INSTANTIATION
+================================================================================
+Xname node1 node2 ... subcktName
+X1 x y vdd gnd inverter        # Maps: ip=x, op=y, vdd=vdd, gnd=gnd (in subckt order)
+
+5. ANALYSIS STATEMENTS
+================================================================================
+.tran start stop [step]        # Transient analysis
+.tran 1ps 20ns                 # Run 20ns with 1ps resolution
+.measure tran result_name TRIG cond TARG cond
+                               # Measure time between trigger and target conditions
+
+6. MEASUREMENT SYNTAX
+================================================================================
+.measure tran tpcq_inv         # Measure name
++TRIG v(x) VAL=0.9 FALL=1      # Trigger: when v(x) falls through 0.9V (1st occurrence)
++TARG v(y) VAL=0.9 RISE=1      # Target: when v(y) rises through 0.9V (1st occurrence)
+
+Options:
+  TRIG/TARG: Start condition / End condition
+  v(node): Voltage at node
+  VAL=value: Voltage threshold (0.9V = 50% of 1.8V)
+  RISE=N: Nth rising edge, FALL=N: Nth falling edge
+  FIND: Find when condition met, AT=time: at specific time
+  
+Example:
+.measure tran tr TRIG v(y) VAL=0.36 RISE=1 TARG v(y) VAL=1.44 RISE=1
+         # Rise time = time for output to go from 10% (0.36V) to 90% (1.44V)
+
+7. CONTROL SECTION - PLOTTING & OUTPUT
+================================================================================
+.control
+  run                          # Execute simulation
+  plot v(node1) v(node2)       # Plot voltage signals
+  plot v(y) 4+v(x)             # v(y) at 0V offset, v(x) at 4V offset (spacing)
+  hardcopy file.ps signal_list # Save plot as PostScript file
+  set hcopypscolor=1           # Enable colored output
+  set color0 = white           # Set background color
+.endc
+
+PLOT SYNTAX: plot signal1 [offset+]signal2 [offset+]signal3 ...
+  v(node): Voltage at node
+  offset: Y-axis offset multiplier (e.g., 4+v(x) = offset by 4V)
+  Multiple signals automatically overlaid with color differentiation
+
+8. PARAMETER EXPRESSIONS
+================================================================================
+{expression}                   # Use braces for mathematical expressions
+.param W = {20*LAMBDA}         # Multiply: 20 times LAMBDA
+.param W_p = {2*W}             # Use previously defined parameters
+.param w_p = {2*W}             # Case-insensitive
+
+9. NODE NAMING & VOLTAGE ACCESS
+================================================================================
+v(nodeName)                    # Access voltage of node in measurements/plots
+v(x)                           # Voltage at node x
+v(y)                           # Voltage at node y
+v(vdd)                         # Voltage at power supply node
+
+10. SIGNAL CONVENTIONS
+================================================================================
+Logic 0: Near 0V (ground)
+Logic 1: Near 1.8V (Vdd)
+50% point: 0.9V (TTL-equivalent)
+10% point: 0.36V (for rise/fall time)
+90% point: 1.44V (for rise/fall time)
+
+11. COMMON MEASUREMENTS
+================================================================================
+Propagation Delay: Time from input transition to output transition at 50% point
+  .measure tran tpd TRIG v(in) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+
+Rise Time: Time for output to go from 10% to 90%
+  .measure tran tr TRIG v(out) VAL=0.36 RISE=1 TARG v(out) VAL=1.44 RISE=1
+
+Fall Time: Time for output to go from 90% to 10%
+  .measure tran tf TRIG v(out) VAL=1.44 FALL=1 TARG v(out) VAL=0.36 FALL=1
+
+Average Delay: Combine measurements with param
+  .measure tran avg_delay param = ((tpd_lh + tpd_hl)/2)
+
+12. EXAMPLE CIRCUITS
+================================================================================
+
+INVERTER:
+.subckt inverter in out vdd gnd
+  Mpmos out in vdd vdd CMOSP W=40n L=180n
+  Mnmos out in gnd gnd CMOSN W=20n L=180n
+.ends
+
+NAND GATE:
+.subckt nand in1 in2 out vdd gnd
+  Mpmos1 out in1 vdd vdd CMOSP W=40n L=180n
+  Mpmos2 out in2 vdd vdd CMOSP W=40n L=180n
+  Mnmos1 mid in1 gnd gnd CMOSN W=20n L=180n
+  Mnmos2 out in2 mid gnd CMOSN W=20n L=180n
+.ends
+
+13. FILE STRUCTURE
+================================================================================
+Circuit netlist files (.cir):
+1. Technology include & parameters
+2. Power supply definition
+3. Input signal definitions
+4. Subcircuit definitions (.subckt ... .ends)
+5. Main circuit instantiations (X...)
+6. Analysis statements (.tran, .measure)
+7. Control section (.control ... .endc)
+
+================================================================================
+END OF SYNTAX GUIDE
+================================================================================

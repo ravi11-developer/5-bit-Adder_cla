@@ -111,6 +111,7 @@ X5 a4 b4 g4 vdd gnd generate
 X4 a1 b1 p1 vdd gnd propagate
 X6 a4 b4 p4 vdd gnd propagate
 
+* .measure: .measure tran result TRIG v(node) VAL=value RISE/FALL=occurrence TARG v(node) VAL=value RISE/FALL=occurrence
 .measure tran prop_delay
 +TRIG v(a1) VAL=0.9 FALL=1
 +TARG v(p1) VAL=0.9 RISE=1
@@ -127,7 +128,9 @@ set color0 = white
 set xbrushwidth = 3
 set hcopypscolor=1
 set curplottitle = "raviSahu2024102024_CLAADDER"
+* plot: plot v(node1) offset+v(node2)
 plot v(g1) 2+v(p1) 4+v(b1) 6+v(a1)
+* hardcopy: hardcopy filename v(node1) offset+v(node2)
 hardcopy prop_gen_bit1_outputs.ps v(g1) 2+v(p1) 4+v(b1) 6+v(a1)
 plot 8+v(g4) 10+v(p4) 12+v(b4) 14+v(a4)
 hardcopy prop_gen_bit4_outputs.ps 8+v(g4) 10+v(p4) 12+v(b4) 14+v(a4)

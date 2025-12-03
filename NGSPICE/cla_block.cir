@@ -9,7 +9,6 @@
 
 VDD Vdd gnd DC 'SUPPLY'
 
-* Input Signals
 Va0 a0 gnd 0V
 Va1 a1 gnd 0V
 Va2 a2 gnd PULSE(0 1.8 0ns 0ns 0ns 5ns 10ns)
@@ -405,6 +404,7 @@ Xs4 p4 c4 s4 vdd gnd propagate s=1
 
 .tran 1ps 20ns
 
+* .measure: .measure tran result TRIG v(node) VAL=value RISE/FALL=occurrence TARG v(node) VAL=value RISE/FALL=occurrence
 .measure tran tpcq_cla
 +TRIG v(a2) VAL=0.9 RISE=1
 +TARG v(s4) VAL=0.9 RISE=1
@@ -415,8 +415,9 @@ set color0 = white
 set xbrushwidth = 3
 set hcopypscolor=1
 set curplottitle = "raviSahu2024102024_CLAADDER"
+* plot: plot v(node1) offset+v(node2)
 plot v(a0) 2+v(a1) 4+v(a2) 6+v(a3) 8+v(a4) 10+v(b0) 12+v(b1) 14+v(b2) 16+v(b3) 18+v(b4)
+* hardcopy: hardcopy filename v(node1) offset+v(node2)
 hardcopy cla_block_inputs.ps v(a0) 2+v(a1) 4+v(a2) 6+v(a3) 8+v(a4) 10+v(b0) 12+v(b1) 14+v(b2) 16+v(b3) 18+v(b4)
 plot v(s0) 2+v(s1) 4+v(s2) 6+v(s3) 8+v(s4) 10+v(c5)
 hardcopy cla_block_outputs.ps v(s0) 2+v(s1) 4+v(s2) 6+v(s3) 8+v(s4) 10+v(c5)
-.endc
