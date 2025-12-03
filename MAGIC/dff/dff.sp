@@ -1,4 +1,14 @@
 .include TSMC_180nm.txt
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
+.param SUPPLY=1.8
+* Define supply voltage parameter = 1.8V
+.option scale=90n
+* Scale factor: all layout dimensions multiplied by 90nm
+.global gnd vdd
+* Global nodes: ground and power supply
+
+Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
 .param SUPPLY=1.8
 .option scale=90n
 .global gnd vdd
@@ -60,11 +70,17 @@ C28 vdd 0 4.9425f
 
 vclk clk gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
 vd d gnd pulse 0 1.8 0 0.1n 0.1n 7n 14n
+
+* Clock-to-q delay measurements: clk -> q
+.measure tran tpcq_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(q) VAL=0.9 RISE=1
+.measure tran tpcq_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(q) VAL=0.9 FALL=1
+.measure tran avg_tpcq param = ((tpcq_lh + tpcq_hl)/2)
+
 .tran 0.01n 80n
 .control
 run
-plot v(clk) v(d)+2 v(q)+4
 set hcopypscolor = 1
 set color0=white
 set color1=black
+plot v(clk) v(d)+2 v(q)+4
 .endc

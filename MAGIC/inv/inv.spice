@@ -1,5 +1,15 @@
 * SPICE3 file created from inv.ext - technology: scmos
 .include TSMC_180nm.txt
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
+.param SUPPLY=1.8
+* Define supply voltage parameter = 1.8V
+.option scale=90n
+* Scale factor: all layout dimensions multiplied by 90nm
+.global gnd vdd
+* Global nodes: ground and power supply
+
+Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
 .param SUPPLY=1.8 
 .option scale=90n
 .global gnd vdd
@@ -25,12 +35,18 @@ C11 in 0 0.224289f
 C12 w_n9_n5# 0 0.88789f 
 
 vin in gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+
+* Propagation delay measurements: in -> out
+.measure tran tpd_lh TRIG v(in) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 FALL=1
+.measure tran tpd_hl TRIG v(in) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran avg_tpd param = ((tpd_lh + tpd_hl)/2)
+
 .tran 0.01n 60n
 
 .control
 run 
-plot v(in) v(out)
 set hcopypscolor = 1
 set color0=white
 set color1=black
+plot v(in) v(out)
 .endc

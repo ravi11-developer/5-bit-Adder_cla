@@ -33,6 +33,12 @@ C17 vcc 0 1.02851f
 VDD vcc 0 1.8
 Vin1 input_1 0 PULSE(0 1.8 0 1n 1n 5n 10n)
 Vin2 input_2 0 PULSE(0 1.8 0 1n 1n 10n 20n)
+
+* Propagation delay measurements: NAND output
+.measure tran tpd_lh TRIG v(input_1) VAL=0.9 RISE=1 TARG v(a_7_1#) VAL=0.9 FALL=1
+.measure tran tpd_hl TRIG v(input_1) VAL=0.9 FALL=1 TARG v(a_7_1#) VAL=0.9 RISE=1
+.measure tran avg_tpd param = ((tpd_lh + tpd_hl)/2)
+
 .tran 0.1n 10
 .plot v(input_1) v(input_2) v(a_7_1#)
 

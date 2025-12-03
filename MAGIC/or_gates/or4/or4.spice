@@ -1,10 +1,15 @@
 * SPICE3 file created from or4.ext - technology: scmos
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
 .include TSMC_180nm.txt
+* Define supply voltage parameter = 1.8V
 .param SUPPLY=1.8
+* Scale factor: all layout dimensions multiplied by 90nm
 .option scale=90n
+* Global nodes: ground and power supply
 .global gnd vdd
 
 Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
 
 
 M1000 out nout vdd vdd CMOSP w=20 l=2
@@ -67,11 +72,28 @@ vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
 vc c gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
 vd d gnd pulse 0 1.8 0 0.1n 0.1n 80n 160n
 
+* Propagation delay measurements: inputs (a,b,c,d) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = ((tpd_a_lh + tpd_a_hl)/2)
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = ((tpd_b_lh + tpd_b_hl)/2)
+
+.measure tran tpd_c_lh TRIG v(c) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_c_hl TRIG v(c) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_c param = ((tpd_c_lh + tpd_c_hl)/2)
+
+.measure tran tpd_d_lh TRIG v(d) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_d_hl TRIG v(d) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_d param = ((tpd_d_lh + tpd_d_hl)/2)
+
 .tran  0.01n 200ns
 .control
 run
-plot v(a) v(b)+2 v(c)+4 v(d)+6 v(out)+8
 set hcopypscolor = 1
 set color0=white
 set color1=black
+plot v(a) v(b)+2 v(c)+4 v(d)+6 v(out)+8
 .endc

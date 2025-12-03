@@ -2098,7 +2098,32 @@ vb4 b4d gnd 0
 
 * Initial carry-in (typically 0)
 vc0 c0d gnd 0
-* excepted  s= 00011, Cout = 1
+
+* Propagation delay measurements: sum and carry outputs
+.measure tran tpd_s0_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(s0) VAL=0.9 RISE=1
+.measure tran tpd_s0_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(s0) VAL=0.9 FALL=1
+.measure tran avg_tpd_s0 param = ((tpd_s0_lh + tpd_s0_hl)/2)
+
+.measure tran tpd_s1_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(s1) VAL=0.9 RISE=1
+.measure tran tpd_s1_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(s1) VAL=0.9 FALL=1
+.measure tran avg_tpd_s1 param = ((tpd_s1_lh + tpd_s1_hl)/2)
+
+.measure tran tpd_s2_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(s2) VAL=0.9 RISE=1
+.measure tran tpd_s2_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(s2) VAL=0.9 FALL=1
+.measure tran avg_tpd_s2 param = ((tpd_s2_lh + tpd_s2_hl)/2)
+
+.measure tran tpd_s3_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(s3) VAL=0.9 RISE=1
+.measure tran tpd_s3_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(s3) VAL=0.9 FALL=1
+.measure tran avg_tpd_s3 param = ((tpd_s3_lh + tpd_s3_hl)/2)
+
+.measure tran tpd_s4_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(s4) VAL=0.9 RISE=1
+.measure tran tpd_s4_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(s4) VAL=0.9 FALL=1
+.measure tran avg_tpd_s4 param = ((tpd_s4_lh + tpd_s4_hl)/2)
+
+.measure tran tpd_c5_lh TRIG v(clk) VAL=0.9 RISE=1 TARG v(c5) VAL=0.9 RISE=1
+.measure tran tpd_c5_hl TRIG v(clk) VAL=0.9 RISE=2 TARG v(c5) VAL=0.9 FALL=1
+.measure tran avg_tpd_c5 param = ((tpd_c5_lh + tpd_c5_hl)/2)
+
 .tran 0.01ns 200ns
 .control
 run

@@ -1,15 +1,23 @@
 .include TSMC_180nm.txt
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
 .param SUPPLY=1.8
+* Define supply voltage parameter = 1.8V (used in voltage source)
 .option scale=90n
+* Scale factor: all layout dimensions multiplied by 90nm
 .global gnd vdd
+* Global nodes: ground and power supply accessible to all
 
 Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
 
-
+* CMOSP (P-channel MOSFET) - Pull-up network: Mname drain gate source bulk type W=width L=length
 M1000 nout b vdd w_n22_n17# CMOSP w=20 l=2
 +  ad=100p pd=30u as=100p ps=50u
+* ad/as: drain/source area; pd/ps: drain/source perimeter (for parasitic caps)
 M1001 vdd a nout w_n22_n17# CMOSP w=20 l=2
 +  ad=100p pd=50u as=100p ps=30u
+
+* CMOSN (N-channel MOSFET) - Pull-down network
 M1002 a_n9_n56# b gnd Gnd CMOSN w=20 l=2
 +  ad=100p pd=30u as=100p ps=50u
 M1003 nout a a_n9_n56# Gnd CMOSN w=20 l=2
@@ -18,6 +26,8 @@ M1004 out nout gnd Gnd CMOSN w=10 l=2
 +  ad=50p pd=30u as=50p ps=30u
 M1005 out nout vdd w_n22_n17# CMOSP w=20 l=2
 +  ad=100p pd=50u as=100p ps=50u
+
+* Parasitic Capacitors (Cname node1 node2 capacitance_value)
 C0 gnd a_n9_n56# 1.02e-19
 C1 a a_n9_n56# 9.07e-20
 C2 nout gnd 0.068338f
@@ -48,11 +58,20 @@ C25 w_n22_n17# 0 2.67773f
 va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
 vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
 
+* Propagation delay measurements: input (a,b) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = ((tpd_a_lh + tpd_a_hl)/2)
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = ((tpd_b_lh + tpd_b_hl)/2)
+
 .tran  0.01n 100ns
 .control
 run
-plot v(a) v(b)+2 v(out)+4
 set hcopypscolor = 1
 set color0=white
 set color1=black
+plot v(a) v(b)+2 v(out)+6
 .endc

@@ -1,4 +1,14 @@
 .include TSMC_180nm.txt
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
+.param SUPPLY=1.8
+* Define supply voltage parameter = 1.8V
+.option scale=90n
+* Scale factor: all layout dimensions multiplied by 90nm
+.global gnd vdd
+* Global nodes: ground and power supply
+
+Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
 .param SUPPLY=1.8
 .option scale=90n
 .global gnd vdd
@@ -58,12 +68,21 @@ vaa abar gnd pulse 1.8 0 0 0.1n 0.1n 10n 20n
 vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
 vab bbar gnd pulse 1.8 0 0 0.1n 0.1n 20n 40n
 
+* Propagation delay measurements: inputs (a,b) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = ((tpd_a_lh + tpd_a_hl)/2)
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = ((tpd_b_lh + tpd_b_hl)/2)
+
 .tran 0.01n 60n
 
 .control
 run
-plot v(a) v(b)+2  v(out)+4
 set hcopypscolor = 1
 set color0=white
 set color1=black
+plot v(a) v(b)+2  v(out)+4
 .endc

@@ -1,5 +1,25 @@
 * SPICE3 file created from or6.ext - technology: scmos
 .include "TSMC_180nm.txt"
+* ============================================================
+* SPICE SYNTAX EXPLANATION:
+* .include: Include external model/technology file
+* .param: Define parameters (SUPPLY voltage = 1.8V)
+* .option: Simulation options (scale=90n means all dimensions multiplied by 90nm)
+* .global: Global nodes accessible to all subcircuits (gnd, vdd)
+* Vdd/Vss: Voltage sources - Vdd vdd gnd 'SUPPLY' sets VDD=1.8V
+* M (MOSFET): Syntax: Mname drain gate source bulk type W=width L=length
+*   CMOSP: P-channel MOSFET (pull-up network)
+*   CMOSN: N-channel MOSFET (pull-down network)
+*   ad,as: Drain/Source area (parasitic capacitance)
+*   pd,ps: Drain/Source perimeter (parasitic capacitance)
+* C (Capacitor): Cname node1 node2 value - parasitic capacitances from layout extraction
+* v (Voltage Source): vname node1 node2 pulse V1 V2 Tdelay Trise Tfall Tpulse Tperiod
+* .measure: Measure delay between signal edges
+*   TRIG: Trigger condition (signal, threshold voltage VAL=0.9V, edge type RISE/FALL, occurrence #)
+*   TARG: Target condition (same format as TRIG)
+*   Result: Time difference between TRIG and TARG crossing
+* .tran: Transient analysis - .tran Tstep Tstop (simulate for Tstop seconds with step Tstep)
+* ============================================================
 .option scale=90n
 .param SUPPLY=1.8
 * .option scale=10n
@@ -96,6 +116,31 @@ vc c gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
 vd d gnd pulse 0 1.8 0 0.1n 0.1n 80n 160n
 ve f gnd pulse 0 1.8 0 0.1n 0.1n 160n 320n
 vf e gnd 0
+
+* Propagation delay measurements: inputs (a,b,c,d,e,f) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = ((tpd_a_lh + tpd_a_hl)/2)
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = ((tpd_b_lh + tpd_b_hl)/2)
+
+.measure tran tpd_c_lh TRIG v(c) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_c_hl TRIG v(c) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_c param = ((tpd_c_lh + tpd_c_hl)/2)
+
+.measure tran tpd_d_lh TRIG v(d) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_d_hl TRIG v(d) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_d param = ((tpd_d_lh + tpd_d_hl)/2)
+
+.measure tran tpd_e_lh TRIG v(f) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_e_hl TRIG v(f) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_e param = ((tpd_e_lh + tpd_e_hl)/2)
+
+.measure tran tpd_f_lh TRIG v(e) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_f_hl TRIG v(e) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_f param = ((tpd_f_lh + tpd_f_hl)/2)
 
 .tran  0.01n 400ns
 .control

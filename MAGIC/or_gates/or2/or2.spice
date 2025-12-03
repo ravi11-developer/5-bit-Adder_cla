@@ -41,6 +41,15 @@ C18 vdd 0 3.9854f
 va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
 vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
 
+* Propagation delay measurements: input (a,b) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = ((tpd_a_lh + tpd_a_hl)/2)
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = ((tpd_b_lh + tpd_b_hl)/2)
+
 .tran  0.01n 100ns
 .control
 run
