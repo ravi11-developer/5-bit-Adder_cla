@@ -1,0 +1,83 @@
+.include TSMC_180nm.txt
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
+.param SUPPLY=1.8
+* Define supply voltage parameter = 1.8V (used in voltage source)
+.option scale=90n
+* Scale factor: all layout dimensions multiplied by 90nm
+.global gnd vdd
+* Global nodes: ground and power supply accessible to all
+
+Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
+
+* CMOSP (P-channel MOSFET) - Pull-up network: Mname drain gate source bulk type W=width L=length
+M1000 nout b vdd w_n22_n17# CMOSP w=20 l=2
++  ad=100p pd=30u as=100p ps=50u
+* ad/as: drain/source area; pd/ps: drain/source perimeter (for parasitic caps)
+M1001 vdd a nout w_n22_n17# CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=30u
+
+* CMOSN (N-channel MOSFET) - Pull-down network
+M1002 a_n9_n56# b gnd Gnd CMOSN w=20 l=2
++  ad=100p pd=30u as=100p ps=50u
+M1003 nout a a_n9_n56# Gnd CMOSN w=20 l=2
++  ad=100p pd=50u as=100p ps=30u
+M1004 out nout gnd Gnd CMOSN w=10 l=2
++  ad=50p pd=30u as=50p ps=30u
+M1005 out nout vdd w_n22_n17# CMOSP w=20 l=2
++  ad=100p pd=50u as=100p ps=50u
+
+* Parasitic Capacitors (Cname node1 node2 capacitance_value)
+C0 gnd a_n9_n56# 1.02e-19
+C1 a a_n9_n56# 9.07e-20
+C2 nout gnd 0.068338f
+C3 a nout 0.130858f
+C4 vdd a 0.002098f
+C5 w_n22_n17# nout 0.036842f
+C6 w_n22_n17# vdd 0.124439f
+C7 out gnd 0.130598f
+C8 b gnd 0.001857f
+C9 w_n22_n17# out 0.009324f
+C10 b a 0.120825f
+C11 vdd nout 0.503497f
+C12 w_n22_n17# b 0.021163f
+C13 a gnd 0.042148f
+C14 nout out 0.060313f
+C15 vdd out 0.233693f
+C16 b nout 0.045231f
+C17 vdd b 0.002098f
+C18 w_n22_n17# a 0.021018f
+C19 gnd 0 0.332585f  
+C20 out 0 0.105517f  
+C21 nout 0 0.370671f  
+C22 a 0 0.281837f  
+C23 b 0 0.248727f  
+C24 vdd 0 0.202306f  
+C25 w_n22_n17# 0 2.67773f  
+
+va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
+
+* Propagation delay measurements: input (a,b) -> out
+* For AND gate: output rises when BOTH inputs are high, output falls when ANY input goes low
+* tpd_lh: measure when input rises and causes output to rise
+* tpd_hl: measure when input falls and causes output to fall
+
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = '(tpd_a_lh + tpd_a_hl)/2'
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 FALL=2
+.measure tran avg_tpd_b param = '(tpd_b_lh + tpd_b_hl)/2'
+
+.tran  0.01n 100ns
+.control
+run
+set hcopypscolor = 1
+set color0=white
+set xbrushwidth = 3
+set curplottitle = "raviSahu2024102024CLAADDER"
+plot v(a) v(b)+2 v(out)+6
+hardcopy and2_outputs.ps v(a) 2+v(b) 4+v(out)
+.endc

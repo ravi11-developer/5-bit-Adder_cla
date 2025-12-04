@@ -1,0 +1,117 @@
+* SPICE3 file created from or5.ext - technology: scmos
+* Include TSMC 180nm technology file (model definitions for NMOS/PMOS)
+.include TSMC_180nm.txt
+* Define supply voltage parameter = 1.8V
+.param SUPPLY=1.8
+* Scale factor: all layout dimensions multiplied by 10nm
+.option scale=10n
+* Global nodes: ground and power supply
+.global gnd vdd
+
+Vdd vdd gnd 'SUPPLY'
+* Voltage source: VDD = 1.8V
+
+
+M1000 gnd d nout Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.18m as=4.05n ps=0.18m
+M1001 a_53_n202# d a_41_n202# vdd CMOSP w=900 l=18
++  ad=40.5n pd=0.99m as=40.5n ps=0.99m
+M1002 nout c gnd Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.18m as=4.05n ps=0.18m
+M1003 a_65_n202# c a_53_n202# vdd CMOSP w=900 l=18
++  ad=40.5n pd=0.99m as=40.5n ps=0.99m
+M1004 gnd b nout Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.18m as=4.05n ps=0.18m
+M1005 a_77_n202# b a_65_n202# vdd CMOSP w=900 l=18
++  ad=40.5n pd=0.99m as=40.5n ps=0.99m
+M1006 nout e gnd Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.18m as=4.05n ps=0.27m
+M1007 nout a gnd Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.27m as=4.05n ps=0.18m
+M1008 out nout vdd vdd CMOSP w=180 l=18
++  ad=8.099999n pd=0.45m as=8.099999n ps=0.45m
+M1009 out nout gnd Gnd CMOSN w=90 l=18
++  ad=4.05n pd=0.27m as=4.05n ps=0.27m
+M1010 a_41_n202# e vdd vdd CMOSP w=900 l=18
++  ad=40.5n pd=0.99m as=40.5n ps=1.89m
+M1011 nout a a_77_n202# vdd CMOSP w=900 l=18
++  ad=40.5n pd=1.89m as=40.5n ps=0.99m
+C0 vdd a_77_n202# 2.27e-19
+C1 b a 0.668529f
+C2 vdd a_41_n202# 2.27e-19
+C3 d b 0.007278f
+C4 e a 0.007681f
+C5 e d 0.173673f
+C6 vdd c 0.020069f
+C7 nout gnd 0.97603f
+C8 b gnd 0.002057f
+C9 e gnd 0.001695f
+C10 c nout 0.010468f
+C11 vdd nout 0.071223f
+C12 vdd a_53_n202# 2.27e-19
+C13 c b 0.503577f
+C14 d a 0.007278f
+C15 e c 0.007278f
+C16 vdd b 0.020069f
+C17 vdd e 0.020937f
+C18 out gnd 0.103095f
+C19 a gnd 0.002057f
+C20 d gnd 0.002057f
+C21 b nout 0.010468f
+C22 vdd out 0.215514f
+C23 e nout 0.002904f
+C24 vdd a_65_n202# 2.27e-19
+C25 c a 0.007278f
+C26 d c 0.338625f
+C27 e b 0.007278f
+C28 vdd a 0.020069f
+C29 vdd d 0.020069f
+C30 nout out 0.060313f
+C31 c gnd 0.002057f
+C32 a nout 0.694603f
+C33 d nout 0.010468f
+C34 gnd 0 0.33309f 
+C35 out 0 0.11334f 
+C36 nout 0 0.720759f 
+C37 a 0 0.459184f 
+C38 b 0 0.42865f 
+C39 c 0 0.415772f 
+C40 d 0 0.402894f 
+C41 e 0 0.392837f 
+C42 vdd 0 11.561f 
+
+va a gnd pulse 0 1.8 0 0.1n 0.1n 10n 20n
+vb b gnd pulse 0 1.8 0 0.1n 0.1n 20n 40n
+vc c gnd pulse 0 1.8 0 0.1n 0.1n 40n 80n
+vd d gnd pulse 0 1.8 0 0.1n 0.1n 80n 160n
+ve e gnd pulse 0 1.8 0 0.1n 0.1n 160n 320n
+
+* Propagation delay measurements: inputs (a,b,c,d,e) -> out
+.measure tran tpd_a_lh TRIG v(a) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_a_hl TRIG v(a) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_a param = '(tpd_a_lh + tpd_a_hl)/2'
+
+.measure tran tpd_b_lh TRIG v(b) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_b_hl TRIG v(b) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_b param = '(tpd_b_lh + tpd_b_hl)/2'
+
+.measure tran tpd_c_lh TRIG v(c) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_c_hl TRIG v(c) VAL=0.9 FALL=1 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_c param = '(tpd_c_lh + tpd_c_hl)/2'
+
+.measure tran tpd_d_lh TRIG v(d) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_d_hl TRIG v(d) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_d param = ((tpd_d_lh + tpd_d_hl)/2)
+
+.measure tran tpd_e_lh TRIG v(e) VAL=0.9 RISE=1 TARG v(out) VAL=0.9 RISE=1
+.measure tran tpd_e_hl TRIG v(e) VAL=0.9 RISE=2 TARG v(out) VAL=0.9 FALL=1
+.measure tran avg_tpd_e param = ((tpd_e_lh + tpd_e_hl)/2)
+
+.tran  0.01n 400ns
+.control
+run
+set hcopypscolor = 1
+set color0=white
+set color1=black
+plot v(a) v(b)+2 v(c)+4 v(d)+6 v(e)+8 v(out)+10
+.endc

@@ -1,0 +1,143 @@
+
+Checking parameters for BSIM 3.2 model cmosn
+Warning: Pd = 4.5e-12 is less than W.
+Warning: Ps = 4.5e-12 is less than W.
+
+Checking parameters for BSIM 3.2 model cmosn
+Warning: Pd = 2.7e-12 is less than W.
+Warning: Ps = 2.7e-12 is less than W.
+
+Checking parameters for BSIM 3.2 model cmosp
+Warning: Pd = 4.5e-12 is less than W.
+Warning: Ps = 4.5e-12 is less than W.
+
+Note: No compatibility mode selected!
+
+
+Circuit: * spice3 file created from and4.ext - technology: scmos
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+vdd                                        1.8
+nout                                       1.8
+b                                            0
+a                                            0
+d                                            0
+out                                7.11599e-09
+c                                            0
+vd#branch                                    0
+vc#branch                                    0
+vb#branch                                    0
+va#branch                                    0
+vdd#branch                        -1.67236e-11
+
+ Reference value :  1.46950e-08 Reference value :  3.35450e-08 Reference value :  5.27750e-08 Reference value :  7.40950e-08 Reference value :  9.46650e-08 Reference value :  1.16665e-07
+No. of Data Rows : 12179
+
+  Measurements for Transient Analysis
+
+tpd_a_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_a_hl            =  8.283842e-11 targ=  5.232838e-09 trig=  5.150000e-09
+avg_tpd_a           =  8.75237e-11
+tpd_b_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_b_hl            =  -4.917162e-09 targ=  5.232838e-09 trig=  1.015000e-08
+avg_tpd_b           =  -2.41248e-09
+tpd_c_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_c_hl            =  -1.491716e-08 targ=  5.232838e-09 trig=  2.015000e-08
+avg_tpd_c           =  -7.41248e-09
+tpd_d_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_d_hl            =  -3.491716e-08 targ=  5.232838e-09 trig=  4.015000e-08
+avg_tpd_d           =  -1.74125e-08
+
+
+Warning: command 'plot' is not available during batch simulation, ignored!
+    You may use Gnuplot instead.
+
+
+Checking parameters for BSIM 3.2 model cmosn
+Warning: Pd = 4.5e-12 is less than W.
+Warning: Ps = 4.5e-12 is less than W.
+
+Checking parameters for BSIM 3.2 model cmosn
+Warning: Pd = 2.7e-12 is less than W.
+Warning: Ps = 2.7e-12 is less than W.
+
+Checking parameters for BSIM 3.2 model cmosp
+Warning: Pd = 4.5e-12 is less than W.
+Warning: Ps = 4.5e-12 is less than W.
+
+The file "and4_outputs.ps" may be printed on a postscript printer.
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+vdd                                        1.8
+nout                                       1.8
+b                                            0
+a                                            0
+d                                            0
+out                                7.11599e-09
+c                                            0
+vd#branch                                    0
+vc#branch                                    0
+vb#branch                                    0
+va#branch                                    0
+vdd#branch                        -1.67236e-11
+
+ Reference value :  1.47450e-08 Reference value :  3.68350e-08 Reference value :  5.55550e-08 Reference value :  7.73450e-08 Reference value :  9.82950e-08
+No. of Data Rows : 12179
+
+  Measurements for Transient Analysis
+
+Netlist line no. 82:
+insertnumber: fails.
+  s = ".measure tran avg_tpd_a param=    8.752370274403003e-11   " u="  8.752370274403003e-11  " id=0
+Netlist line no. 86:
+insertnumber: fails.
+  s = ".measure tran avg_tpd_b param=   -2.412476297255970e-09   " u=" -2.412476297255970e-09  " id=0
+Netlist line no. 90:
+insertnumber: fails.
+  s = ".measure tran avg_tpd_c param=   -7.412476297255972e-09   " u=" -7.412476297255972e-09  " id=0
+Netlist line no. 94:
+insertnumber: fails.
+  s = ".measure tran avg_tpd_d param=   -1.741247629725597e-08   " u=" -1.741247629725597e-08  " id=0
+tpd_a_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_a_hl            =  8.283842e-11 targ=  5.232838e-09 trig=  5.150000e-09
+avg_tpd_a           =   failed
+tpd_b_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_b_hl            =  -4.917162e-09 targ=  5.232838e-09 trig=  1.015000e-08
+avg_tpd_b           =   failed
+tpd_c_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_c_hl            =  -1.491716e-08 targ=  5.232838e-09 trig=  2.015000e-08
+avg_tpd_c           =   failed
+tpd_d_lh            =  9.220898e-11 targ=  1.422090e-10 trig=  5.000000e-11
+tpd_d_hl            =  -3.491716e-08 targ=  5.232838e-09 trig=  4.015000e-08
+avg_tpd_d           =   failed
+
+
+Total analysis time (seconds) = 0.380095
+
+Total elapsed time (seconds) = 0.385 
+
+Total DRAM available = 15701.652 MB.
+DRAM currently available = 2595.672 MB.
+Maximum ngspice program size =   84.129 MB.
+Current ngspice program size =   17.516 MB.
+
+Shared ngspice pages =   13.059 MB.
+Text (code) pages =    6.371 MB.
+Stack = 0 bytes.
+Library pages =   60.453 MB.
+
